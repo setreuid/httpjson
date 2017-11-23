@@ -5,8 +5,29 @@ Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 모듈�
 
 현재 Post 방식으로 String 형만 가능합니다. (2017-11-23)
 
+## Setup
+
+### Gradle
+
+Edit `root/app/build.gradle` like below.
+
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    compile 'com.github.setreuid:httpjson:1.0.3'
+}
+```
+
+
 ## Usage
-##### POST JSON Parsing without params
+
+#### POST JSON Parsing without params
 파라미터 없이 POST JSON 파싱
 ```java
 String url = "http://echo.jsontest.com/float-test/3.14/key/value";
@@ -37,7 +58,7 @@ new HttpJson(url, params, new HttpJsonTask() {
 }).post();
 ```
 
-##### POST JSON Parsing with params
+#### POST JSON Parsing with params
 파라미터 포함하여 POST JSON 파싱
 ```java
 String url = "http://echo.jsontest.com/float-test/3.14/key/value";
