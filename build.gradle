@@ -11,5 +11,5 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '4.0'
 }
