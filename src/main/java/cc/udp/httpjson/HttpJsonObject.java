@@ -41,9 +41,9 @@ public class HttpJsonObject
         return ((JSONObject) item).toJSONString();
     }
 
-    public JSONObject getObject(String key)
+    public HttpJsonObject getObject(String key)
     {
-        return (JSONObject)((JSONObject)item).get(key);
+        return new HttpJsonObject(((JSONObject)item).get(key));
     }
 
     public Object get(String key)
