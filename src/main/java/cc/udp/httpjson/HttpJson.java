@@ -24,6 +24,13 @@ public class HttpJson
 
     public void post()
     {
+        this.httpTask.setRequestMode("POST");
+        this.httpTask.start();
+    }
+
+    public void get()
+    {
+        this.httpTask.setRequestMode("GET");
         this.httpTask.start();
     }
 

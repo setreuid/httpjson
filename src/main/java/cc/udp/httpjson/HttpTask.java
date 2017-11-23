@@ -19,6 +19,8 @@ public class HttpTask extends Thread
     private String params;
     private HttpTaskHandler doneHandler;
 
+    private String requestMode = "POST";
+
     public HttpTask(String url, HashMap<String, String> p, HttpTaskHandler func)
     {
         this.targetUrl = url;
@@ -48,19 +50,24 @@ public class HttpTask extends Thread
         StringBuilder contents = new StringBuilder();
         String tempContents;
 
+        if (this.requestMode.equals("GET") && this.params.length() > 0)
+        {
+            this.targetUrl += "?" + this.params;
+        }
+
         try
         {
-            URL url = new URL(targetUrl);
-            URLConnection conn = (URLConnection)url.openConnection();
+            URL url = new URL(this.targetUrl);
+            URLConnection conn = (URLConnection) url.openConnection();
             HttpURLConnection hconn = (HttpURLConnection) conn;
 
-            hconn.setRequestMethod("POST");
+            hconn.setRequestMethod(this.requestMode);
             hconn.setDoOutput(true);
             hconn.setDoInput(true);
             hconn.setUseCaches(true);
             hconn.setDefaultUseCaches(true);
 
-            if (this.params.length() > 0)
+            if (this.params.length() > 0 && this.requestMode.equals("POST"))
             {
                 OutputStream writer = hconn.getOutputStream();
                 writer.write(this.params.getBytes());
@@ -76,11 +83,16 @@ public class HttpTask extends Thread
             }
 
             buff.close();
-            doneHandler.func(contents);
+            this.doneHandler.func(contents);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+    }
+
+    public void setRequestMode(String mode)
+    {
+        this.requestMode = mode;
     }
 }

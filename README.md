@@ -42,7 +42,7 @@ new HttpJson(url, params, new HttpJsonTask() {
 ```java
 String url = "http://echo.jsontest.com/float-test/3.14/key/value";
 
-String url = "http://gw.dmel.co.kr/api/subreq/nfcAppLogin.php?uuid=9ec3e8f534b34e62";
+String url = "http://p.udp.cc/jsonPostTest.php";
 HashMap<String, String> params = new HashMap<String, String>();
 
 params.put("test-key", "A123456789B");
@@ -70,7 +70,7 @@ new HttpJson(url, params, new HttpJsonTask() {
 ```
 
 ## Todo
-- [ ] GET 지원
+- [X] GET 지원
 - [ ] PUT, PATCH, DELETE 추가
 - [ ] 파라미터 HashMap Bytes 형 추가
 - [ ] HTTP 예외처리
