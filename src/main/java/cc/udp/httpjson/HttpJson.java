@@ -27,8 +27,11 @@ public class HttpJson
         this.httpTask.start();
     }
 
-    public void taskDone(String response)
+    private void taskDone(String response)
     {
+        // If just post call then return
+        if (this.taskHandler == null) return;
+
         JSONParser jsonParser = new JSONParser();
 
         try
