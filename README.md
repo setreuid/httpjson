@@ -1,7 +1,7 @@
 # httpjson
-Java library for parse http json more easy.
+Java module for parse http json more easy.
 
-Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 라이브러리입니다.
+Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 모듈입니다.
 
 현재 Post 방식으로 String 형만 가능합니다. (2017-11-23)
 
@@ -11,7 +11,7 @@ Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 라이�
 
 ### Gradle
 
-Edit your root `build.gradle` like below.
+Edit `root/app/build.gradle` like below.
 
 ```gradle
 allprojects {
@@ -29,6 +29,17 @@ dependencies {
 
 
 ## Usage
+
+#### Imports
+
+```java
+import java.util.HashMap;
+
+import cc.udp.httpjson.HttpJson;
+import cc.udp.httpjson.HttpJsonObject;
+import cc.udp.httpjson.HttpJsonTask;
+```
+
 
 #### POST JSON Parsing without params
 파라미터 없이 POST JSON 파싱
@@ -50,13 +61,13 @@ new HttpJson(url, params, new HttpJsonTask() {
         // }
         
         // Check json string
-        system.out.println("JSON: " + json.toString());
+        System.out.println("JSON: " + json.toString());
         
         String keyValue       = json.getString("key");
         String floatTestValue = json.getFloat("float-test");
         
-        system.out.println("key: " + keyValue);
-        system.out.println("float-test: " + floatTestValue);
+        System.out.println("key: " + keyValue);
+        System.out.println("float-test: " + floatTestValue);
     }
 }).post();
 ```
@@ -90,13 +101,15 @@ new HttpJson(url, null, new HttpJsonTask() {
         // }
         
         // Check json string
-        system.out.println("JSON: " + json.toString());
+        System.out.println("JSON: " + json.toString());
         
         String status          = json.getString("status");
-        String addressLongName = json.getObject("resultst").getArray("address_components")[0].getString("long_name");
+        String addressLongName = json.getArray("results").get(0)
+                                     .getArray("address_components").get(0)
+                                     .getString("long_name");
         
-        system.out.println("status: " + status);
-        system.out.println("addressLongName: " + addressLongName);
+        System.out.println("status: " + status);
+        System.out.println("addressLongName: " + addressLongName);
     }
 }).get();
 ```
@@ -123,10 +136,10 @@ new HttpJson(url, params, new HttpJsonTask() {
         // }
         
         // Check json string
-        system.out.println("JSON: " + json.toString());
+        System.out.println("JSON: " + json.toString());
         
         String value = json.getString("test-key");
-        system.out.println("test-key: " + value);
+        System.out.println("test-key: " + value);
     }
 }).post();
 ```
@@ -154,10 +167,10 @@ new HttpJson(url, params, new HttpJsonTask() {
         // }
         
         // Check json string
-        system.out.println("JSON: " + json.toString());
+        System.out.println("JSON: " + json.toString());
         
         String value = json.getString("test-key");
-        system.out.println("test-key: " + value);
+        System.out.println("test-key: " + value);
     }
 }).get();
 ```
@@ -188,7 +201,6 @@ new HttpJson(url, params, null).post();
 
 | Return type                 | Method name | Parameters |
 | --------------------------- | ----------- | ---------- |
-| String                      | toString    |            |
 | HttpJsonObject              | getObject   | String key |
 | ArrayList\<HttpJsonObject\> | getArray    | String key |
 | String                      | getString   | String key |
