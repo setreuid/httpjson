@@ -19,6 +19,17 @@ public class HttpJsonObject
         this.item = item;
     }
 
+    @Override
+    public String toString()
+    {
+        return ((JSONObject) item).toJSONString();
+    }
+
+    public HttpJsonObject getObject(String key)
+    {
+        return new HttpJsonObject(((JSONObject)item).get(key));
+    }
+
     public ArrayList<HttpJsonObject> getArray(String key)
     {
         JSONArray jsonArray = (JSONArray)((JSONObject)item).get(key);
@@ -33,17 +44,6 @@ public class HttpJsonObject
         }
 
         return list;
-    }
-
-    @Override
-    public String toString()
-    {
-        return ((JSONObject) item).toJSONString();
-    }
-
-    public HttpJsonObject getObject(String key)
-    {
-        return new HttpJsonObject(((JSONObject)item).get(key));
     }
 
     public Object get(String key)
