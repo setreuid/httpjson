@@ -22,6 +22,7 @@ public class HttpJsonObject
     @Override
     public String toString()
     {
+        if (item instanceof String) return (String) item;
         return ((JSONObject) item).toJSONString();
     }
 

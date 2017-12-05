@@ -51,7 +51,7 @@ public class HttpJson
         catch (ParseException e)
         {
             e.printStackTrace();
-            taskHandler.done(null);
+            taskHandler.done(new HttpJsonObject(response));
         }
     }
 
@@ -72,7 +72,7 @@ public class HttpJson
 
             if (obj instanceof String)
             {
-                sb.append((String) obj);
+                sb.append("\"" + (String) obj + "\"");
             }
             else if (obj instanceof Integer)
             {
