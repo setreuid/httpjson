@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by DMDEV on 2017-11-23.

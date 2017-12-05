@@ -4,6 +4,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HttpJson
@@ -51,5 +53,68 @@ public class HttpJson
             e.printStackTrace();
             taskHandler.done(null);
         }
+    }
+
+    public static String stringify(HashMap<String, Object> params)
+    {
+        StringBuilder sb = new StringBuilder();
+        Object obj;
+        int index = 0;
+
+        sb.append("{");
+
+        for (String key : params.keySet())
+        {
+            index++;
+            sb.append("\"" + key + "\":");
+
+            obj = params.get(key);
+
+            if (obj instanceof String)
+            {
+                sb.append((String) obj);
+            }
+            else if (obj instanceof Integer)
+            {
+                sb.append((int) obj);
+            }
+            else if (obj instanceof Float)
+            {
+                sb.append((float) obj);
+            }
+            else if (obj instanceof Boolean)
+            {
+                sb.append(((boolean) obj) ? "true" : "false");
+            }
+            else
+            {
+                sb.append("null");
+            }
+
+            if (params.size() > index) sb.append(",");
+        }
+
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public static String stringify(ArrayList<HashMap<String, Object>> params)
+    {
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+
+        sb.append("[");
+
+        for (HashMap<String, Object> item : params)
+        {
+            index++;
+            sb.append(stringify(item));
+
+            if (params.size() > index) sb.append(",");
+        }
+
+        sb.append("]");
+
+        return sb.toString();
     }
 }
