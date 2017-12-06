@@ -41,6 +41,7 @@ public class HttpJson
         // If just post call then return
         if (this.taskHandler == null) return;
 
+        if (response != null) response = response.replace("\uFEFF", "");
         JSONParser jsonParser = new JSONParser();
 
         try

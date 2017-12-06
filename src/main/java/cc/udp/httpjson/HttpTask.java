@@ -3,9 +3,11 @@ package cc.udp.httpjson;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 public class HttpTask extends Thread
 {
     private String targetUrl;
-    private String params;
+    private HashMap<String, String> params;
     private HttpTaskHandler doneHandler;
 
     private String requestMode = "POST";
@@ -30,18 +32,11 @@ public class HttpTask extends Thread
 
         if (p == null)
         {
-            this.params = "";
+            this.params = new HashMap<String, String>();
         }
         else
         {
-            StringBuilder sb = new StringBuilder();
-            for (String key : p.keySet())
-            {
-                if (sb.length() > 0) sb.append("&");
-                sb.append(key + "=" + p.get(key));
-            }
-
-            this.params = sb.toString();
+            this.params = p;
         }
     }
 
@@ -52,9 +47,9 @@ public class HttpTask extends Thread
         StringBuilder contents = new StringBuilder();
         String tempContents;
 
-        if (this.requestMode.equals("GET") && this.params.length() > 0)
+        if (this.requestMode.equals("GET") && this.params.size() > 0)
         {
-            this.targetUrl += "?" + this.params;
+            this.targetUrl += "?" + this.getEncodedParams();
         }
 
         try
@@ -69,15 +64,19 @@ public class HttpTask extends Thread
             hconn.setUseCaches(true);
             hconn.setDefaultUseCaches(true);
 
-            if (this.params.length() > 0 && this.requestMode.equals("POST"))
+            if (this.params.size() > 0 && this.requestMode.equals("POST"))
             {
+                byte[] postParams = this.getEncodedParams().getBytes("UTF-8");
+                hconn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                hconn.setRequestProperty("Content-Length", String.valueOf(postParams.length));
+
                 OutputStream writer = hconn.getOutputStream();
-                writer.write(this.params.getBytes());
+                writer.write(postParams);
                 writer.flush();
                 writer.close();
             }
 
-            BufferedReader buff = new BufferedReader(new InputStreamReader (hconn.getInputStream(), "utf-8"));
+            BufferedReader buff = new BufferedReader(new InputStreamReader (hconn.getInputStream(), "UTF-8"));
 
             while((tempContents = buff.readLine()) != null)
             {
@@ -91,6 +90,25 @@ public class HttpTask extends Thread
         {
             e.printStackTrace();
         }
+    }
+
+    public String getEncodedParams()
+    {
+        StringBuilder sb = new StringBuilder();
+        for (String key : params.keySet())
+        {
+            if (sb.length() > 0) sb.append("&");
+            try
+            {
+                sb.append(URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(params.get(key), "UTF-8"));
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
     }
 
     public void setRequestMode(String mode)
