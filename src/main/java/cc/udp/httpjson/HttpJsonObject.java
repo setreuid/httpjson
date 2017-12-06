@@ -54,6 +54,7 @@ public class HttpJsonObject
 
     public String getString(String key)
     {
+        if (this.get(key) == null) return "";
         return this.get(key).toString();
     }
 
