@@ -22,7 +22,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.setreuid:httpjson:1.0.5'
+    compile 'com.github.setreuid:httpjson:1.0.6'
 }
 ```
 
