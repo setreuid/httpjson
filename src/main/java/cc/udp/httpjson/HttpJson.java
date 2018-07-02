@@ -12,6 +12,7 @@ public class HttpJson
 {
     private HttpTask httpTask;
     private HttpJsonTask taskHandler;
+    private HttpJsonTaskError taskHandlerError;
 
     public HttpJson(String url, HashMap<String, String> params, HttpJsonTask func)
     {
@@ -22,6 +23,13 @@ public class HttpJson
                 taskDone(stringBuilder.toString());
             }
         });
+        this.httpTask.setUncaughtExceptionHandler(new ThreadExceptionHandler(this));
+    }
+
+    public HttpJson setThreadExceptionHandler(HttpJsonTaskError funcCatch)
+    {
+        this.taskHandlerError = funcCatch;
+        return this;
     }
 
     public void post()
@@ -36,6 +44,12 @@ public class HttpJson
         this.httpTask.start();
     }
 
+    public void threadErrorException()
+    {
+        if (this.taskHandlerError == null) return;
+        this.taskHandlerError.error();
+    }
+
     private void taskDone(String response)
     {
         // If just post call then return
@@ -47,12 +61,12 @@ public class HttpJson
         try
         {
             JSONObject root = (JSONObject) jsonParser.parse(response);
-            taskHandler.done(new HttpJsonObject(root));
+            this.taskHandler.done(new HttpJsonObject(root));
         }
         catch (ParseException e)
         {
             e.printStackTrace();
-            taskHandler.done(new HttpJsonObject(response));
+            this.taskHandler.done(new HttpJsonObject(response));
         }
     }
 
