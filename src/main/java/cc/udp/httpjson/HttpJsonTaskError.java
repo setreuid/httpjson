@@ -5,5 +5,5 @@ package cc.udp.httpjson;
  */
 
 public interface HttpJsonTaskError {
-    void error();
+    void error(Exception e);
 }

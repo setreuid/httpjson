@@ -16,6 +16,7 @@ public class ThreadExceptionHandler implements Thread.UncaughtExceptionHandler
     @Override
     public void uncaughtException(Thread thread, Throwable e)
     {
-        httpJson.threadErrorException();
+        e.printStackTrace();
+        httpJson.threadErrorException(new Exception(e.getMessage(), e));
     }
 }

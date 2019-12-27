@@ -10,29 +10,25 @@ import java.util.Iterator;
  * Created by DMDEV on 2017-11-23.
  */
 
-public class HttpJsonObject
-{
+public class HttpJsonObject {
+
     private Object item;
 
-    HttpJsonObject(Object item)
-    {
+    HttpJsonObject(Object item) {
         this.item = item;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         if (item instanceof String) return (String) item;
         return ((JSONObject) item).toJSONString();
     }
 
-    public HttpJsonObject getObject(String key)
-    {
+    public HttpJsonObject getObject(String key) {
         return new HttpJsonObject(((JSONObject)item).get(key));
     }
 
-    public ArrayList<HttpJsonObject> getArray(String key)
-    {
+    public ArrayList<HttpJsonObject> getArray(String key) {
         JSONArray jsonArray = (JSONArray)((JSONObject)item).get(key);
         Iterator<JSONObject> iterJsonArray = jsonArray.iterator();
 
@@ -47,34 +43,28 @@ public class HttpJsonObject
         return list;
     }
 
-    public Object get(String key)
-    {
+    public Object get(String key) {
         return ((JSONObject)item).get(key);
     }
 
-    public String getString(String key)
-    {
+    public String getString(String key) {
         if (this.get(key) == null) return "";
         return this.get(key).toString();
     }
 
-    public int getInt(String key)
-    {
+    public int getInt(String key) {
         return Integer.parseInt(this.getString(key));
     }
 
-    public float getFloat(String key)
-    {
+    public float getFloat(String key) {
         return Float.parseFloat(this.getString(key));
     }
 
-    public double getDouble(String key)
-    {
+    public double getDouble(String key) {
         return Double.parseDouble(this.getString(key));
     }
 
-    public byte[] getBytes(String key)
-    {
+    public byte[] getBytes(String key) {
         return (this.getString(key)).getBytes();
     }
 }

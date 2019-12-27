@@ -1,9 +1,7 @@
+
 # httpjson
 Java library for parse http json more easy.
-
 Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 라이브러리 입니다.
-
-현재 Post 방식으로 String 형만 가능합니다. (2017-11-23)
 
 
 
@@ -37,16 +35,18 @@ import java.util.HashMap;
 
 import cc.udp.httpjson.HttpJson;
 import cc.udp.httpjson.HttpJsonObject;
-import cc.udp.httpjson.HttpJsonTask;
+import cc.udp.httpjson.HttpJsonTask;  
+import cc.udp.httpjson.HttpBytesTask;
 ```
 
+***
 
-#### POST JSON Parsing without params
-파라미터 없이 POST JSON 파싱
+#### JSON Parsing without params
+> 파라미터 없이 JSON 파싱
 ```java
-String url = "http://echo.jsontest.com/float-test/3.14/key/value";
+String url = "https://jsonplaceholder.typicode.com/posts/1";
 
-new HttpJson(url, params, new HttpJsonTask() {
+new HttpJson(url, null, new HttpJsonTask() {
     @Override
     public void done(HttpJsonObject json)
     {
@@ -56,24 +56,46 @@ new HttpJson(url, params, new HttpJsonTask() {
         }
         
         // {
-        //  "key": "value",
-        //  "float-test": "3.14"
-        // }
+		//   "userId": 1,
+		//   "id": 1,
+		//   "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+		//   "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+		// }
         
         // Check json string
         System.out.println("JSON: " + json.toString());
         
-        String keyValue       = json.getString("key");
-        String floatTestValue = json.getFloat("float-test");
+        String id    = json.getInt("id");
+        String title = json.getString("title");
         
-        System.out.println("key: " + keyValue);
-        System.out.println("float-test: " + floatTestValue);
+        System.out.println("id: " + id);
+        System.out.println("title: " + title);
     }
-}).post();
+}).get();
+```
+###### lambda
+```java
+new HttpJson("https://jsonplaceholder.typicode.com/posts/1")
+    .then((HttpJsonObject json) -> {
+        // Check json string
+        System.out.println("JSON: " + json.toString());
+        
+        String id    = json.getInt("id");
+        String title = json.getString("title");
+        
+        System.out.println("id: " + id);
+        System.out.println("title: " + title);
+    })
+    .except((e) -> {
+        System.out.println(e.getMessage());
+    })
+    .get();
 ```
 
+***
+
 #### Access JSON value with method chaining
-메서드 체인을 이용한 JSON 값 가져오기
+> 메서드 체인을 이용한 JSON 값 가져오기
 ```java
 String url = "https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA";
 
@@ -114,8 +136,10 @@ new HttpJson(url, null, new HttpJsonTask() {
 }).get();
 ```
 
+***
+
 #### POST JSON Parsing with params
-파라미터 포함하여 POST JSON 파싱
+> 파라미터 포함하여 POST JSON 파싱
 ```java
 String url = "http://p.udp.cc/jsonPostTest.php";
 
@@ -143,9 +167,28 @@ new HttpJson(url, params, new HttpJsonTask() {
     }
 }).post();
 ```
+###### lambda
+```java
+new HttpJson("http://p.udp.cc/jsonPostTest.php")
+    .addField("test-key", "A123456789B")
+    .then((HttpJsonObject json) -> {
+        // Check json string
+        System.out.println("JSON: " + json.toString());
+        
+        String value = json.getString("test-key");
+        System.out.println("test-key: " + value);
+    })
+    .except((e) -> {
+        System.out.println(e.getMessage());
+    })
+    .post();
+```
+
+
+***
 
 #### GET JSON Parsing with params
-파라미터 포함하여 POST JSON 파싱
+> 파라미터 포함하여 GET JSON 파싱
 ```java
 String url = "http://p.udp.cc/jsonGetTest.php";
 
@@ -174,16 +217,36 @@ new HttpJson(url, params, new HttpJsonTask() {
     }
 }).get();
 ```
+###### lambda
+```java
+new HttpJson("http://p.udp.cc/jsonGetTest.php")
+    .addField("test-key", "A123456789B")
+    .then((HttpJsonObject json) -> {
+        // Check json string
+        System.out.println("JSON: " + json.toString());
+        
+        String value = json.getString("test-key");
+        System.out.println("test-key: " + value);
+    })
+    .except((e) -> {
+        System.out.println(e.getMessage());
+    })
+    .get();
+```
+
+***
 
 #### Just Call without params
-파라미터 포함하지 않고 단순 호출
+> 파라미터 포함하지 않고 단순 호출
 ```java
 String url = "http://p.udp.cc/jsonPostTest.php";
 new HttpJson(url, null, null).post();
 ```
 
+***
+
 #### Just Call with params
-파라미터 포함하여 단순 호출
+> 파라미터 포함하여 단순 호출
 ```java
 String url = "http://p.udp.cc/jsonPostTest.php";
 
@@ -191,6 +254,59 @@ HashMap<String, String> params = new HashMap<String, String>();
 params.put("test-key", "A123456789B");
 
 new HttpJson(url, params, null).post();
+```
+
+***
+
+#### With headers
+> 헤더 추가하기
+
+* (en) If `Content-Type` is specified as` application/json`, parameters are sent in JSON format.
+* (en)  Unless otherwise specified, `application/x-www-form-urlencoded` is the default value of`Content-Type`.
+* (ko) `Content-Type`을 `application/json`으로 지정하면 JSON 형태로 파라미터를 전송합니다.
+* (ko) 특별히 지정하지 않을때에는 `application/x-www-form-urlencoded`이 `Content-Type`의 기본값입니다.
+
+```java
+new HttpJson("http://p.udp.cc/jsonPostTest.php")
+    .addHeader("Content-Type", "application/json")
+    .addField("test-key", "A123456789B")
+    .then((HttpJsonObject json) -> {
+        // Check json string
+        System.out.println("JSON: " + json.toString());
+        
+        String value = json.getString("test-key");
+        System.out.println("test-key: " + value);
+    })
+    .except((e) -> {
+        System.out.println(e.getMessage());
+    })
+    .post();
+```
+
+***
+
+#### Binary
+> 바이너리 값 가져오기
+
+```java
+public static String byteArrayToHexString(byte[] bytes){  
+    StringBuilder sb = new StringBuilder();  
+	for(byte b : bytes){  
+        sb.append(String.format("%02X", b&0xff));  
+  }  
+    return sb.toString();  
+}
+```
+```java
+new HttpJson("https://s.yimg.com/rz/p/yahoo_frontpage_en-US_s_f_p_205x58_frontpage_2x.png")
+    .then((byte[] binary) -> {
+        System.out.println("binary: " + byteArrayToHexString(binary));
+        // binary: 89504E470D0A1A0A0000000D494844520000019A0000007408030...
+    })
+    .except((e) -> {
+        System.out.println(e.getMessage());
+    })
+    .get();
 ```
 
 
@@ -213,8 +329,8 @@ new HttpJson(url, params, null).post();
 
 
 ## Todo
-- [X] GET 지원
-- [ ] PUT, PATCH, DELETE 추가
-- [ ] 파라미터 HashMap Bytes 형 추가
-- [ ] HTTP 예외처리
-- [ ] 자원 최적화
+- [X] GET
+- [X] POST
+- [X] Return 결과를 byte[]로 받기
+- [ ] PUT, PATCH, DELETE
+- [ ] byte[]형 필드 추가
