@@ -22,8 +22,22 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.setreuid:httpjson:1.0.6'
+    compile 'com.github.setreuid:httpjson:1.0.9'
 }
+```
+```maven
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.setreuid</groupId>
+    <artifactId>httpjson</artifactId>
+    <version>1.0.9</version>
+</dependency>
 ```
 
 
