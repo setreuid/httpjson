@@ -22,7 +22,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.setreuid:httpjson:1.0.9'
+    compile 'com.github.setreuid:httpjson:1.0.12'
 }
 ```
 ```maven
@@ -36,7 +36,7 @@ dependencies {
 <dependency>
     <groupId>com.github.setreuid</groupId>
     <artifactId>httpjson</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.12</version>
 </dependency>
 ```
 
