@@ -1,7 +1,7 @@
 
 # httpjson
-(en) Java library for parse http json more easy.
-(ko) Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 라이브러리 입니다.
+- (en) Java library for parse http json more easy.
+- (ko) Url과 파라미터를 넘기고 콜백 함수로 Json 결과를 받는 라이브러리 입니다.
 
 [![](https://jitpack.io/v/setreuid/httpjson.svg)](https://jitpack.io/#setreuid/httpjson)
 
